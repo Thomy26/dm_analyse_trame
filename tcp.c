@@ -5,7 +5,24 @@
 // Analyser entete TCP
 void analyserTCP(char *trame, TCP *tcp) 
 {
-    error_exit("fonction analyserTCP() non implémentée");
+       if (trame == NULL || tcp == NULL) {
+        error_exit("Fonction analyserTCP() : trame ou tcp est NULL");
+    }
+
+    // Remplir les champs de la structure TCP
+    tcp->sourcePort = (trame[0] << 8) | trame[1]; // Port source (2 octets)
+    tcp->destinationPort = (trame[2] << 8) | trame[3]; // Port destination (2 octets)
+    tcp->sequenceNumber = (trame[4] << 24) | (trame[5] << 16) | (trame[6] << 8) | trame[7]; // Numéro de séquence (4 octets)
+    tcp->acknowledgmentNumber = (trame[8] << 24) | (trame[9] << 16) | (trame[10] << 8) | trame[11]; // Numéro d'accusé de réception (4 octets)
+    
+    // Data Offset (4 bits) + Reserved (3 bits) + Control Flags (9 bits)
+    tcp->dataOffset = (trame[12] >> 4) & 0x0F; // Décalage de données en mots de 32 bits
+    tcp->reserved = (trame[12] >> 1) & 0x07; // Bits réservés
+    tcp->flags = trame[13]; // Flags de contrôle
+
+    tcp->windowSize = (trame[14] << 8) | trame[15]; // Taille de la fenêtre (2 octets)
+    tcp->checksum = (trame[16] << 8) | trame[17]; // Checksum (2 octets)
+    tcp->urgentPointer = (trame[18] << 8) | trame[19]; // Pointeur urgent (2 octets)
 }
 
 // Afficher entete TCP
