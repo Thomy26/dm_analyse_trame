@@ -29,21 +29,17 @@
 // Afficher une adresse IP
 void afficherIPAddress(unsigned int address)
     {
-    if (adresse == NULL) {
-        printf("Adresse Ethernet non valide\n");
-        return;
-    }
+    unsigned char bytes[4];
+    
+    // Extraire les 4 octets de l'adresse
+    bytes[0] = (address >> 24) & 0xFF; // Octet le plus significatif
+    bytes[1] = (address >> 16) & 0xFF;
+    bytes[2] = (address >> 8) & 0xFF;
+    bytes[3] = address & 0xFF; // Octet le moins significatif
 
-    printf("Adresse Ethernet: ");
-    for (int i = 0; i < 6; i++) {
-        // Afficher chaque octet en hexadécimal
-        printf("%02X", adresse[i]);
-        // Ajouter un ':' après chaque octet sauf le dernier
-        if (i < 5) {
-            printf(":");
-        }
-    }
-    printf("\n");
+    // Afficher l'adresse IP au format x.x.x.x
+    printf("%d.%d.%d.%d", bytes[0], bytes[1], bytes[2], bytes[3]);
+
 }
 
 // Afficher entete IP
